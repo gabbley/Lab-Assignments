@@ -72,8 +72,18 @@ public class FileReader {
 		}
 	}
 	
-	public static void part3(){
+	public static void part3(Scanner story){
+		ArrayList<String> everyWord = new ArrayList<String>();
+		ArrayList<Integer> positions = new ArrayList<Integer>();
 		
+		while (story.hasNext()){
+			int i = 0;
+			everyWord.add(story.next()); //add every word to ArrayList
+			if (story.next().indexOf("<") != -1 && story.next().indexOf("/>") != -1){
+				 positions.add(everyWord.size()-1);
+				 i++;
+			}
+		}
 	}
 	
 	public static boolean compareFiles(Scanner p1, Scanner p2){
@@ -102,7 +112,7 @@ public class FileReader {
 				if (c== '{') {
 					openBrace++;
 				}
-				else if (c == '{'){
+				else if (c == '}'){
 					closedBrace++;
 				}
 			}
