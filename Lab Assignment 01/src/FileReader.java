@@ -109,12 +109,18 @@ public class FileReader {
 	public static boolean checkBraces(Scanner in) {
 		int openBrace = 0;
 		int closedBrace = 0;
+		int countOpen = 0;
+		int countClosed = 0;
 		
 		while(in.hasNextLine()) {
 			char[] arrChar = in.nextLine().toCharArray();
 			for (char c : arrChar) {
 				if (c== '{') {
 					openBrace++;
+					while (countClosed == 0) {
+					countOpen++;
+					}
+					
 				}
 				else if (c == '}'){
 					closedBrace++;
