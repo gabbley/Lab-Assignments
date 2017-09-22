@@ -17,8 +17,6 @@ public class FileReader {
 		if (in == null)
 			System.exit(1);
 
-		//PrintWriter out = canBeOpened(args[1], 2);
-
 		part1(args[0]);
 		part2(args[0], args[1]);
 		
@@ -49,7 +47,6 @@ public class FileReader {
 		}
 		return output;
 	}
-
 
 
 	public static void part1(String file) {
@@ -91,10 +88,7 @@ public class FileReader {
 		str2 += p1.nextLine();	
 		}
 		
-		if (str1.equals(str2)) {
-			return true;
-		}
-		else return false;
+		return (str1.equals(str2));
 		
 	}
 
