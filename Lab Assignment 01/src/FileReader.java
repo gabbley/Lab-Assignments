@@ -17,13 +17,12 @@ public class FileReader {
 		}
 
 		Scanner in = openFile(args[0]);
-		if (in == null)
+		if (in == null){
 			System.exit(1);
+		}
 
 		part1(args[0]);
 		part2(args[0], args[1]);
-		
-
 	}
 
 	public static Scanner openFile(String filename) {
@@ -45,7 +44,7 @@ public class FileReader {
 		try {
 			output = new PrintWriter(f);
 		} catch (FileNotFoundException e) {
-			output.println("Part" + part + ": Unable to Open File");
+			System.out.println("Part" + part + ": Unable to Open File");
 			return null;
 		}
 		return output;
