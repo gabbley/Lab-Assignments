@@ -49,6 +49,8 @@ public class FileReader {
 		}
 		return output;
 	}
+	
+	//create a method that returns either a full word or a word within brackets
 
 
 	public static void part1(String file) {
