@@ -3,8 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-//Changes by Mrs Kelly
-//Here is a second change
+
 
 public class FileReader {
 
@@ -23,7 +22,7 @@ public class FileReader {
 
 		part1(args[0]);
 		part2(args[0], args[1]);
-		part3(openFile(args[2]));
+		System.out.println(part3(openFile(args[2])));
 	}
 
 	public static Scanner openFile(String filename) { //file to Scanner object
@@ -76,13 +75,15 @@ public class FileReader {
 		}
 	}
 
-	public static void part3(Scanner story) {
+	public static String part3(Scanner story) {
 		ArrayList<String> finalWords = new ArrayList<String>();
-		ArrayList<Integer> positions = new ArrayList<Integer>();
 
-		while (story.hasNext()) { //while there are more words
+
+		while (story.hasNextLine()) { //while there are more words
 			finalWords = everyWord(story.nextLine());
 		}
+		
+		return finalWords.toString();
 	}
 
 	public static boolean compareFiles(Scanner p1, Scanner p2) {
@@ -128,7 +129,6 @@ public class FileReader {
 			
 		}
 
-	
 
 	public static boolean checkBraces(Scanner in) {
 		int openBrace = 0;
@@ -151,11 +151,7 @@ public class FileReader {
 			}
 
 		}
-		if (openBrace == closedBrace) {
-			return true;
-		} else
-			return false;
-
+		return (openBrace == closedBrace);
 	}
 
 }
