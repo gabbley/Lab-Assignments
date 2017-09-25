@@ -1,0 +1,3 @@
+This is a <noun/>
+This is <a verb/>
+And that <verb past tense/> my dog

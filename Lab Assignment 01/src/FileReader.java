@@ -1,3 +1,5 @@
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -22,7 +24,7 @@ public class FileReader {
 
 		part1(args[0]);
 		part2(args[0], args[1]);
-		System.out.println(part3(openFile(args[2])));
+		System.out.println(userMadLibs((part3(openFile(args[2])))).toString());
 	}
 
 	public static Scanner openFile(String filename) { //file to Scanner object
@@ -75,15 +77,17 @@ public class FileReader {
 		}
 	}
 
-	public static String part3(Scanner story) {
-		ArrayList<String> finalWords = new ArrayList<String>();
+	public static ArrayList<String> part3(Scanner story) {
+		ArrayList<String> everyLine = new ArrayList<String>();
+		ArrayList<String> finalWord = new ArrayList<String>();
 
 
 		while (story.hasNextLine()) { //while there are more words
-			finalWords = everyWord(story.nextLine());
+			everyLine = (everyWord(story.nextLine() + "\n"));
+			finalWord.addAll(everyLine);
 		}
 		
-		return finalWords.toString();
+		return finalWord;
 	}
 
 	public static boolean compareFiles(Scanner p1, Scanner p2) {
@@ -100,9 +104,10 @@ public class FileReader {
 		}
 
 		for (int i = 0; i<str1.size(); i++){
-			if (!str1.get(i).equals(str2.get(i))){
-				result = false;;
+			if (str1.get(i).equals(str2.get(i))){
+				result = true;
 			}
+			else result = false;
 		}
 		
 	return result;
@@ -110,24 +115,30 @@ public class FileReader {
 	}
 	
 	public static ArrayList<String> everyWord(String words){
-		ArrayList<String> finalWords = new ArrayList<String>();
-		for (int i = 0; i < words.length(); i++){
-			String s = "";
-		
-			if (words.charAt(i) != ' ' || words.charAt(i) != '<') {
-				s += words.charAt(i);
-			}
-			else{
-				s = words.substring(i, words.indexOf('>'));
-			}
-				
-			finalWords.add(s);
-			//put everything before a space in 
-			}
-		
-		return finalWords;
-			
-		}
+	      ArrayList<String> strArr = new ArrayList<String>();
+	      String s = "";
+	      for (int i = 0; i < words.length(); i++){
+	      
+	         if (words.charAt(i) != '<') {
+	            s += ""+ words.charAt(i);
+	            if ((words.charAt(i) == ' ')){
+	               strArr.add(s);
+	               s = "";
+	            }
+	         }
+	         else if (words.charAt(i) == '<'){
+	            String addThis = words.substring(i, words.indexOf('>')+1);
+	            strArr.add(addThis);
+	            i += addThis.length();
+	         }
+	      		
+	      	//put everything before a space in 
+	      }
+	   	
+	      return strArr;
+	   		
+	   }
+
 
 
 	public static boolean checkBraces(Scanner in) {
@@ -152,6 +163,35 @@ public class FileReader {
 
 		}
 		return (openBrace == closedBrace);
+	}
+	
+	public static ArrayList<String> userMadLibs(ArrayList<String> s){
+		ArrayList<String> finalLibs = new ArrayList<String>(s.size());
+		for (int i = 0; i<s.size(); i++){
+			if (s.get(i).indexOf('<') == -1){
+				finalLibs.add(s.get(i));
+			}
+			else{
+				String type = removeLibs(s.get(i));
+				Scanner kb = new Scanner(System.in);
+				System.out.println("Enter: " + type);
+				String lib = kb.next();
+				finalLibs.add(lib);
+//				
+//				kb.close();
+			}
+		}
+		return finalLibs;
+		
+	}
+	
+	public static String removeLibs(String lib){
+		lib = lib.replace("<", "");
+		lib = lib.replace("/", "");
+		lib = lib.replace("\"", "");
+		lib = lib.replace(">", "");
+		
+		return lib;
 	}
 
 }
