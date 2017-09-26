@@ -1,8 +1,11 @@
-/*	The FileReader class takes in 3-4 files, checks the first two files 
+/*	<p>
+ * The FileReader class takes in 3-4 files, checks the first two files 
  * comparing and if balanced), and uses the last two files to
  * emulate a "MadLibs" game, prompting the user or using the fourth file
  * to replace any missing words in the story provided.
+ * </p>
  * 
+ * @author Gabby Baniqued
  * */
 
 import java.io.File;
@@ -14,25 +17,33 @@ import java.util.Scanner;
 
 public class FileReader {
 
-	//private static String outputFile = "output.txt";
+	/**
+	 * outputFile is the file name of the output file
+	 */	
+	
+	private static String outputFile = "output.txt";
+	//make the PRintWriter a field?
 
 	public static void main(String[] args) {
-		if (args.length < 2) {
+		
+		//checks if there are enough files to run
+		if (args.length < 3) {
 			System.out.println("Not enough files provided");
 			System.exit(1);
 		}
-
+		
+		
 		Scanner in = openFile(args[0]);
 		if (in == null) {
 			System.exit(1);
 		}
 		int part = 1;
-		PrintWriter out = canBeOpened("output.txt", part);
+		PrintWriter out = canBeOpened(outputFile, part);
 		
 		part1(args[0], out); part++;
 		part2(args[0], args[1], out);
 		if (args.length != 4){
-		out.println(userMadLibs((part3(openFile(args[2])))));
+		out.println(arrayToString(userMadLibs((part3(openFile(args[2]))))));
 		}
 		else{
 			ArrayList<String> p3 = userMadLibs((part3(openFile(args[2]))));
@@ -70,8 +81,14 @@ public class FileReader {
 		return output;
 	}
 
-	// create a method that returns either a full word or a word within brackets
-
+    /**
+     * 
+     *  @return void
+     *  
+     *  @param file
+     *  		file name from arguments
+     *  @param 
+     */
 	public static void part1(String file, PrintWriter out) {
 		//PrintWriter output = canBeOpened(file, 1);
 		Scanner p1 = openFile(file);
@@ -166,27 +183,20 @@ public class FileReader {
 
 
 	public static boolean checkBraces(Scanner in) {
-		int openBrace = 0;
-		int closedBrace = 0;
-		int check = 0;
+		int counter = 0;
 		
-		while (in.hasNextLine()) {
+		while (in.hasNextLine()) { 
 			char[] arrChar = in.nextLine().toCharArray();
 			for (char c : arrChar) {
-				while (check == 0) {
 					if (c == '{') {
-						openBrace++;
+						counter++;
 					} 
-					
 					else if (c == '}') {
-						closedBrace++;
-						check++;
+						counter--;
 					}
 				}
 			}
-
-		}
-		return (openBrace == closedBrace);
+		return (counter == 0);
 	}
 	
 	public static ArrayList<String> userMadLibs(ArrayList<String> s){
@@ -200,7 +210,7 @@ public class FileReader {
 				String type = removeLibs(s.get(i));
 				Scanner kb = new Scanner(System.in);
 				System.out.println("Enter: " + type);
-				String lib = kb.next();
+				String lib = kb.next() + "\n";
 				responses.add(lib);
 				finalLibs.add(lib);
 //				
@@ -223,6 +233,15 @@ public class FileReader {
 	}
 	
 	public static void reopenFile(){
+		
+	}
+	
+	public static String arrayToString(ArrayList<String> libs){
+		String s = "";
+		for (int i = 0; i<libs.size(); i++){
+			s += libs.get(i);
+		}
+		return s;
 		
 	}
 
