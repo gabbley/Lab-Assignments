@@ -24,7 +24,15 @@ public class FileReader {
 
 		part1(args[0]);
 		part2(args[0], args[1]);
-		System.out.println(userMadLibs((part3(openFile(args[2])))).toString());
+		if (args.length != 4){
+		System.out.println(userMadLibs((part3(openFile(args[2])))));
+		}
+		else{
+			ArrayList<String> p3 = userMadLibs((part3(openFile(args[2]))));
+			part4(args[3], p3);
+		}
+			
+		
 	}
 
 	public static Scanner openFile(String filename) { //file to Scanner object
@@ -88,6 +96,13 @@ public class FileReader {
 		}
 		
 		return finalWord;
+	}
+	
+	public static void part4(String file, ArrayList<String> p3){
+		PrintWriter output = canBeOpened(file, 4);
+		Scanner p4 = openFile(file);
+		
+		
 	}
 
 	public static boolean compareFiles(Scanner p1, Scanner p2) {
@@ -171,7 +186,7 @@ public class FileReader {
 			if (s.get(i).indexOf('<') == -1){
 				finalLibs.add(s.get(i));
 			}
-			else{
+			else{ //if < and if certain arg p3
 				String type = removeLibs(s.get(i));
 				Scanner kb = new Scanner(System.in);
 				System.out.println("Enter: " + type);
@@ -180,6 +195,8 @@ public class FileReader {
 //				
 //				kb.close();
 			}
+			
+			//else indicates a part 4
 		}
 		return finalLibs;
 		
