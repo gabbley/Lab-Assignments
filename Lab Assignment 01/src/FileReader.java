@@ -43,9 +43,8 @@ public class FileReader {
 		part2(args[0], args[1], out);
 		if (args.length != 4) {
 			out.println(printArray(userMadLibs((part3(args[2])))));
-		}
-		else{
-		part4(args[3], args[2]);
+		} else {
+			part4(args[3], args[2]);
 		}
 
 		out.close();
@@ -128,12 +127,12 @@ public class FileReader {
 		ArrayList<String> lib = new ArrayList<String>();
 		Scanner p4 = openFile(file4, 4);
 		Scanner p3 = openFile(file3, 3);
-		while (p3.hasNextLine() && p4.hasNextLine()){
-		lib = userMadLibs(everyWord(p3.nextLine()), everyWord(p4.nextLine()));
+		while (p3.hasNextLine() && p4.hasNextLine()) {
+			lib = userMadLibs(everyWord(p3.nextLine()), everyWord(p4.nextLine()));
 		}
-		
+
 		return lib;
-		
+
 	}
 
 	public static boolean compareFiles(Scanner p1, Scanner p2) {
@@ -172,7 +171,7 @@ public class FileReader {
 					s = "";
 				}
 			} else if (words.charAt(i) == '<') {
-				String addThis = words.substring(i, words.indexOf('>'));
+				String addThis = words.substring(i, words.indexOf('>', i));
 				strArr.add(addThis);
 				i += addThis.length();
 			}
@@ -204,28 +203,44 @@ public class FileReader {
 
 		ArrayList<String> finalLibs = new ArrayList<String>(words.size());
 		ArrayList<String> responses = new ArrayList<String>();
+		Scanner kb = new Scanner(System.in);
 
 		for (int i = 0; i < words.size(); i++) {
+			String lib = "";
+
+
 			if (words.get(i).indexOf('<') == -1) {
 				finalLibs.add(words.get(i));
-			} else { // if < and if certain arg p3
-				String type = removeLibs(words.get(i));
-				Scanner kb = new Scanner(System.in);
-				System.out.println("Enter: " + type);
-				String lib = kb.next() + "\n";
-				responses.add(lib); // all the responses
-				finalLibs.add(lib); // final edited file
-				//
-				kb.close();
-			}
-		}
-		return finalLibs;
+			} else {
 
+				// remove tags from word
+				String type = removeLibs(words.get(i));
+
+				// prompt user response
+				System.out.println("Enter: " + type);
+				lib = kb.next() + "\n";
+				responses.add(lib); // all the responses
+				finalLibs.add(lib); // final edited words
+				
+			}
+			
+
+			for (int j = 0; j < words.size(); j++) {
+				int counter = 0;
+				if (words.get(i).indexOf('<') != -1) {
+					words.set(i, responses.get(counter));
+				}
+			}
+
+		}
+		if (!kb.hasNext())
+		kb.close(); // close the Scanner
+		
+		return words;
 	}
 
 	public static ArrayList<String> userMadLibs(ArrayList<String> words, ArrayList<String> answerLibs) {
 
-		// ArrayList<String> finalLibs = new ArrayList<String>(words.size());
 		for (int i = 0; i < words.size(); i++) {
 			if (words.get(i).indexOf('<') != -1) {
 				words.set(i, answerLibs.get(i));
@@ -242,10 +257,6 @@ public class FileReader {
 		return lib;
 	}
 
-	public static void reopenFile() {
-
-	}
-
 	public static String arrayToString(ArrayList<String> libs) {
 		String s = "";
 		for (int i = 0; i < libs.size(); i++) {
@@ -254,13 +265,13 @@ public class FileReader {
 		return s;
 
 	}
-	
-	public static String printArray(ArrayList<String> print){
+
+	public static String printArray(ArrayList<String> print) {
 		String s = "";
-		for (int i = 0; i < print.size(); i++){
+		for (int i = 0; i < print.size(); i++) {
 			s += print.get(i);
 		}
-		
+
 		return s;
 	}
 
