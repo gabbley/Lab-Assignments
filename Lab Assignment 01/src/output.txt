@@ -1,0 +1,12 @@
+Braces Balanced
+
+Files Identical
+
+Humpty Dumpty sat on a house
+Humpty Dumpty had a house
+ house
+All the king's house
+ and all the king's house
+Couldn't house
+ house
+ together 

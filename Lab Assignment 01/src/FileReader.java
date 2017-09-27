@@ -39,8 +39,8 @@ public class FileReader {
 			System.exit(1);
 		}
 
-		part1(args[0], out);
-		part2(args[0], args[1], out);
+		part1(args[0]);
+		part2(args[0], args[1]);
 		if (args.length != 4) {
 			out.println(printArray(userMadLibs((part3(args[2])))));
 		} else {
@@ -89,7 +89,7 @@ public class FileReader {
 	 * 
 	 * @param
 	 */
-	public static void part1(String file, PrintWriter out) {
+	public static void part1(String file) {
 		// PrintWriter output = canBeOpened(file, 1);
 		Scanner p1 = openFile(file, 1);
 		if (checkBraces(p1)) {
@@ -100,7 +100,7 @@ public class FileReader {
 
 	}
 
-	public static void part2(String file1, String file2, PrintWriter out) {
+	public static void part2(String file1, String file2) {
 		Scanner p1 = openFile(file1, 2);
 		Scanner p2 = openFile(file2, 2);
 		if (compareFiles(p1, p2)) {
