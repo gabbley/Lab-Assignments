@@ -1,3 +1,4 @@
+
 /*	<p>
  * The FileReader class takes in 3-4 files, checks the first two files 
  * comparing and if balanced), and uses the last two files to
@@ -14,84 +15,84 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class FileReader {
 
 	/**
 	 * outputFile is the file name of the output file
-	 */	
-	
+	 */
+
 	private static String outputFile = "output.txt";
-	//make the PRintWriter a field?
+	private static PrintWriter out = canBeOpened(outputFile);
+	private static int fileNum = 0;
 
 	public static void main(String[] args) {
-		
-		//checks if there are enough files to run
-		if (args.length < 3) {
-			System.out.println("Not enough files provided");
+
+		// checks if there are enough files to run
+		fileNum = args.length;
+		if (fileNum < 3) {
+			out.println("Not enough files provided");
 			System.exit(1);
 		}
-		
-		
-		Scanner in = openFile(args[0]);
+
+		Scanner in = openFile(args[0], 0);
 		if (in == null) {
 			System.exit(1);
 		}
-		int part = 1;
-		PrintWriter out = canBeOpened(outputFile, part);
-		
-		part1(args[0], out); part++;
+
+		part1(args[0], out);
 		part2(args[0], args[1], out);
-		if (args.length != 4){
-		out.println(arrayToString(userMadLibs((part3(openFile(args[2]))))));
+		if (args.length != 4) {
+			out.println(printArray(userMadLibs((part3(args[2])))));
 		}
 		else{
-			ArrayList<String> p3 = userMadLibs((part3(openFile(args[2]))));
-			part4(args[3], p3);
+		part4(args[3], args[2]);
 		}
-		
+
 		out.close();
-			
-		
+
 	}
 
-	public static Scanner openFile(String filename) { //file to Scanner object
+	public static Scanner openFile(String filename, int part) { // file to
+																// Scanner
+																// object
 
 		File f = new File(filename);
 		Scanner input = null;
 		try {
 			input = new Scanner(f);
 		} catch (FileNotFoundException e) {
+			out.println("Part" + part + ": Unable to Open File");
 			return null;
 		}
 		return input;
 	}
 
-	public static PrintWriter canBeOpened(String filename, int part) { 
-		//returns  a Printwriter if file can be opened/found
+	public static PrintWriter canBeOpened(String filename) {
+		// returns a Printwriter if file can be opened/found
 
 		File f = new File(filename);
 		PrintWriter output = null;
 		try {
 			output = new PrintWriter(f);
 		} catch (FileNotFoundException e) {
-			System.out.println("Part" + part + ": Unable to Open File");
+			System.out.println("Cannot open file: " + filename);
 			return null;
 		}
 		return output;
 	}
 
-    /**
-     * 
-     *  @return void
-     *  
-     *  @param file
-     *  		file name from arguments
-     *  @param 
-     */
+	/**
+	 * 
+	 * @return void
+	 * 
+	 * @param file
+	 *            file name from args
+	 * 
+	 * @param
+	 */
 	public static void part1(String file, PrintWriter out) {
-		//PrintWriter output = canBeOpened(file, 1);
-		Scanner p1 = openFile(file);
+		// PrintWriter output = canBeOpened(file, 1);
+		Scanner p1 = openFile(file, 1);
 		if (checkBraces(p1)) {
 			out.println("Braces Balanced\n");
 		} else {
@@ -101,9 +102,8 @@ public class FileReader {
 	}
 
 	public static void part2(String file1, String file2, PrintWriter out) {
-		//PrintWriter output = canBeOpened(file2, 2);
-		Scanner p1 = openFile(file1);
-		Scanner p2 = openFile(file2);
+		Scanner p1 = openFile(file1, 2);
+		Scanner p2 = openFile(file2, 2);
 		if (compareFiles(p1, p2)) {
 			out.println("Files Identical\n");
 		} else {
@@ -111,23 +111,28 @@ public class FileReader {
 		}
 	}
 
-	public static ArrayList<String> part3(Scanner story) {
+	public static ArrayList<String> part3(String file) {
+		Scanner p3 = openFile(file, 3);
 		ArrayList<String> everyLine = new ArrayList<String>();
 		ArrayList<String> finalWord = new ArrayList<String>();
 
-
-		while (story.hasNextLine()) { //while there are more words
-			everyLine = (everyWord(story.nextLine() + "\n"));
+		while (p3.hasNextLine()) { // while there are more words
+			everyLine = (everyWord(p3.nextLine() + "\n"));
 			finalWord.addAll(everyLine);
 		}
-		
+
 		return finalWord;
 	}
-	
-	public static void part4(String file, ArrayList<String> p3){
-	//	PrintWriter output = canBeOpened(file, 4);
-		Scanner p4 = openFile(file);
+
+	public static ArrayList<String> part4(String file4, String file3) {
+		ArrayList<String> lib = new ArrayList<String>();
+		Scanner p4 = openFile(file4, 4);
+		Scanner p3 = openFile(file3, 3);
+		while (p3.hasNextLine() && p4.hasNextLine()){
+		lib = userMadLibs(everyWord(p3.nextLine()), everyWord(p4.nextLine()));
+		}
 		
+		return lib;
 		
 	}
 
@@ -144,105 +149,119 @@ public class FileReader {
 			str2 = (everyWord(p2.nextLine()));
 		}
 
-		for (int i = 0; i<str1.size(); i++){
-			if (str1.get(i).equals(str2.get(i))){
+		for (int i = 0; i < str1.size(); i++) {
+			if (str1.get(i).equals(str2.get(i))) {
 				result = true;
-			}
-			else result = false;
+			} else
+				result = false;
 		}
-		
-	return result;
+
+		return result;
 
 	}
-	
-	public static ArrayList<String> everyWord(String words){
-	      ArrayList<String> strArr = new ArrayList<String>();
-	      String s = "";
-	      for (int i = 0; i < words.length(); i++){
-	      
-	         if (words.charAt(i) != '<') {
-	            s += ""+ words.charAt(i);
-	            if ((words.charAt(i) == ' ')){
-	               strArr.add(s);
-	               s = "";
-	            }
-	         }
-	         else if (words.charAt(i) == '<'){
-	            String addThis = words.substring(i, words.indexOf('>')+1);
-	            strArr.add(addThis);
-	            i += addThis.length();
-	         }
-	      		
-	      	//put everything before a space in 
-	      }
-	   	
-	      return strArr;
-	   		
-	   }
 
+	public static ArrayList<String> everyWord(String words) {
+		ArrayList<String> strArr = new ArrayList<String>();
+		String s = "";
+		for (int i = 0; i < words.length(); i++) {
 
+			if (words.charAt(i) != '<') {
+				s += "" + words.charAt(i);
+				if ((words.charAt(i) == ' ')) {
+					strArr.add(s);
+					s = "";
+				}
+			} else if (words.charAt(i) == '<') {
+				String addThis = words.substring(i, words.indexOf('>'));
+				strArr.add(addThis);
+				i += addThis.length();
+			}
+
+			// put everything before a space in
+		}
+
+		return strArr;
+
+	}
 
 	public static boolean checkBraces(Scanner in) {
 		int counter = 0;
-		
-		while (in.hasNextLine()) { 
+
+		while (in.hasNextLine()) {
 			char[] arrChar = in.nextLine().toCharArray();
 			for (char c : arrChar) {
-					if (c == '{') {
-						counter++;
-					} 
-					else if (c == '}') {
-						counter--;
-					}
+				if (c == '{') {
+					counter++;
+				} else if (c == '}') {
+					counter--;
 				}
 			}
+		}
 		return (counter == 0);
 	}
-	
-	public static ArrayList<String> userMadLibs(ArrayList<String> s){
-		ArrayList<String> finalLibs = new ArrayList<String>(s.size());
+
+	public static ArrayList<String> userMadLibs(ArrayList<String> words) {
+
+		ArrayList<String> finalLibs = new ArrayList<String>(words.size());
 		ArrayList<String> responses = new ArrayList<String>();
-		for (int i = 0; i<s.size(); i++){
-			if (s.get(i).indexOf('<') == -1){
-				finalLibs.add(s.get(i));
-			}
-			else{ //if < and if certain arg p3
-				String type = removeLibs(s.get(i));
+
+		for (int i = 0; i < words.size(); i++) {
+			if (words.get(i).indexOf('<') == -1) {
+				finalLibs.add(words.get(i));
+			} else { // if < and if certain arg p3
+				String type = removeLibs(words.get(i));
 				Scanner kb = new Scanner(System.in);
 				System.out.println("Enter: " + type);
 				String lib = kb.next() + "\n";
-				responses.add(lib);
-				finalLibs.add(lib);
-//				
-//				kb.close();
+				responses.add(lib); // all the responses
+				finalLibs.add(lib); // final edited file
+				//
+				kb.close();
 			}
-			
-			//else indicates a part 4
 		}
 		return finalLibs;
-		
+
 	}
-	
-	public static String removeLibs(String lib){
+
+	public static ArrayList<String> userMadLibs(ArrayList<String> words, ArrayList<String> answerLibs) {
+
+		// ArrayList<String> finalLibs = new ArrayList<String>(words.size());
+		for (int i = 0; i < words.size(); i++) {
+			if (words.get(i).indexOf('<') != -1) {
+				words.set(i, answerLibs.get(i));
+			}
+		}
+		return words;
+
+	}
+
+	public static String removeLibs(String lib) {
 		lib = lib.replace("<", "");
-		lib = lib.replace("/", "");
-		lib = lib.replace("\"", "");
 		lib = lib.replace(">", "");
-		
+
 		return lib;
 	}
-	
-	public static void reopenFile(){
-		
+
+	public static void reopenFile() {
+
 	}
-	
-	public static String arrayToString(ArrayList<String> libs){
+
+	public static String arrayToString(ArrayList<String> libs) {
 		String s = "";
-		for (int i = 0; i<libs.size(); i++){
+		for (int i = 0; i < libs.size(); i++) {
 			s += libs.get(i);
 		}
 		return s;
+
+	}
+	
+	public static String printArray(ArrayList<String> print){
+		String s = "";
+		for (int i = 0; i < print.size(); i++){
+			s += print.get(i);
+		}
 		
+		return s;
 	}
 
 }
