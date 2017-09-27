@@ -1,3 +1,12 @@
+//NOTE: Turning in LATE assignment
+//this is the last shown github push 4:00AM (ish) 9/27/17
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 
 /*	<p>
  * The FileReader class takes in 3-4 files, checks the first two files 
@@ -8,12 +17,6 @@
  * 
  * @author Gabby Baniqued
  * */
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class FileReader {
 
@@ -160,7 +163,7 @@ public class FileReader {
 		ArrayList<String> everyLine = new ArrayList<String>();
 		ArrayList<String> finalWord = new ArrayList<String>();
 
-		while (p3.hasNextLine()) { // while there are more words
+		while (p3.hasNextLine() || p3.hasNext()) { // while there are more words
 			everyLine = (everyWord(p3.nextLine() + "\n"));
 			finalWord.addAll(everyLine); //merges all lines of .txt file
 		}
@@ -232,8 +235,8 @@ public class FileReader {
 	
 	/**
 	 * <p>
-	 * Takes in file and determines if braces are balanced
-	 * in the style of java
+	 * Takes in a line from the Scanner file and places each word
+	 * or tagged phrase into its own element.
 	 * </p> 
 	 * 
 	 * @return ArrayList<String> of array with each word 
@@ -264,7 +267,11 @@ public class FileReader {
 	}
 
 	/**
-	 * 
+	 * <p>
+	 * Goes through .txt file by character.
+	 * Uses counter variable to identify if braces are balanced.
+	 * Returns false if negative value is reached.
+	 * </p> 
 	 * @return boolean if braces are balanced
 	 * 
 	 * @param Scanner
@@ -272,7 +279,7 @@ public class FileReader {
 	 */
 	public static boolean checkBraces(Scanner in) {
 		int counter = 0;
-
+		
 		while (in.hasNextLine()) {
 			char[] arrChar = in.nextLine().toCharArray();
 			for (char c : arrChar) {
@@ -287,7 +294,10 @@ public class FileReader {
 	}
 
 	/**
-	 * 
+	 * <p>
+	 * Takes in file and determines if braces are balanced
+	 * in the style of java
+	 * </p>  
 	 * @return ArrayList<String> containing Mad Libs file with replacements
 	 * 	by user prompts
 	 * 
