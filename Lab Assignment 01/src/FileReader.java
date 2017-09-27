@@ -1,7 +1,7 @@
 
 /*	<p>
  * The FileReader class takes in 3-4 files, checks the first two files 
- * comparing and if balanced), and uses the last two files to
+ * (comparing and if balanced), and uses the last two files to
  * emulate a "MadLibs" game, prompting the user or using the fourth file
  * to replace any missing words in the story provided.
  * </p>
@@ -19,6 +19,8 @@ public class FileReader {
 
 	/**
 	 * outputFile is the file name of the output file
+	 * PrintWriter writes to the output file
+	 * fileNum determines how many arguments are sent in
 	 */
 
 	private static String outputFile = "output.txt";
@@ -34,27 +36,40 @@ public class FileReader {
 			System.exit(1);
 		}
 
+		//checks if first file can be found
 		Scanner in = openFile(args[0], 0);
 		if (in == null) {
 			System.exit(1);
 		}
 
-		part1(args[0]);
-		part2(args[0], args[1]);
-		if (args.length != 4) {
+		
+		part1(args[0]); //part 1
+		
+		part2(args[0], args[1]); //part 2
+		
+		
+		if (args.length != 4) { //part 3 (if part 4 not applicable)
 			out.println(printArray(userMadLibs((part3(args[2])))));
 		} else {
-			part4(args[3], args[2]);
+			part4(args[3], args[2]); //part 4, if applicable
 		}
 
-		out.close();
+		out.close(); //closes output file
 
 	}
 
-	public static Scanner openFile(String filename, int part) { // file to
-																// Scanner
-																// object
-
+	/**
+	 * 
+	 * @return Scanner of the args file
+	 * 
+	 * @param filename
+	 *            file name from args
+	 * 
+	 * @param part
+	 * 			indicates which part the program is running
+	 */
+	public static Scanner openFile(String filename, int part) { 
+	
 		File f = new File(filename);
 		Scanner input = null;
 		try {
@@ -66,6 +81,13 @@ public class FileReader {
 		return input;
 	}
 
+	/**
+	 * 
+	 * @return PrintWriter to write to output file
+	 * 
+	 * @param filename
+	 *            file name from args
+	 */
 	public static PrintWriter canBeOpened(String filename) {
 		// returns a Printwriter if file can be opened/found
 
@@ -81,17 +103,19 @@ public class FileReader {
 	}
 
 	/**
+	 * <p>
+	 * Takes in file and determines if braces are balanced
+	 * in the style of java
+	 * </p> 
 	 * 
-	 * @return void
+	 * @return void, prints to output
 	 * 
-	 * @param file
+	 * @param filename
 	 *            file name from args
-	 * 
-	 * @param
 	 */
-	public static void part1(String file) {
+	public static void part1(String filename) {
 		// PrintWriter output = canBeOpened(file, 1);
-		Scanner p1 = openFile(file, 1);
+		Scanner p1 = openFile(filename, 1);
 		if (checkBraces(p1)) {
 			out.println("Braces Balanced\n");
 		} else {
@@ -99,7 +123,20 @@ public class FileReader {
 		}
 
 	}
-
+	
+	/**
+	 * <p>
+	 * Takes in two files, indicates if both are completely identical
+	 * </p> 
+	 * 
+	 * @return void, prints to output file
+	 * 
+	 * @param file1
+	 * 			file name for comparison
+	 * 
+	 * @param file2
+	 * 			other file name for comparison
+	 */
 	public static void part2(String file1, String file2) {
 		Scanner p1 = openFile(file1, 2);
 		Scanner p2 = openFile(file2, 2);
@@ -110,19 +147,37 @@ public class FileReader {
 		}
 	}
 
-	public static ArrayList<String> part3(String file) {
-		Scanner p3 = openFile(file, 3);
+	/**
+	 * 
+	 * @return ArrayList<String> of the .txt file separated into 
+	 * 	elements of words, still contains missing words with tags
+	 * 
+	 * @param filename
+	 *            file name from args
+	 */
+	public static ArrayList<String> part3(String filename) {
+		Scanner p3 = openFile(filename, 3);
 		ArrayList<String> everyLine = new ArrayList<String>();
 		ArrayList<String> finalWord = new ArrayList<String>();
 
 		while (p3.hasNextLine()) { // while there are more words
 			everyLine = (everyWord(p3.nextLine() + "\n"));
-			finalWord.addAll(everyLine);
+			finalWord.addAll(everyLine); //merges all lines of .txt file
 		}
 
 		return finalWord;
 	}
-
+	
+	/**
+	 * @return ArrayList<String> of completed .txt file with replacements
+	 * 	from fourth file (if applicable)
+	 * 
+	 * @param file4
+	 * 			file name of fourth file for replacement of missing words
+	 * 
+	 * @param file3
+	 * 			file with tagged words, to be replaced and finalized
+	 */
 	public static ArrayList<String> part4(String file4, String file3) {
 		ArrayList<String> lib = new ArrayList<String>();
 		Scanner p4 = openFile(file4, 4);
@@ -135,6 +190,22 @@ public class FileReader {
 
 	}
 
+	/**
+	 * <p>
+	 * Takes in two files and places each's separate words
+	 * or missing tagged phrases into separate elements. <br>
+	 * Uses .equals to compare each element, returns true if no differences
+	 * are detected, false if otherwise.
+	 * </p> 
+	 * 
+	 * @return boolean if files are identical
+	 * 
+	 * @param p1
+	 * 			Scanner file for comparison
+	 * 
+	 * @param p2
+	 * 			other Scanner file for comparison
+	 */
 	public static boolean compareFiles(Scanner p1, Scanner p2) {
 		ArrayList<String> str1 = new ArrayList<String>();
 		ArrayList<String> str2 = new ArrayList<String>();
@@ -158,7 +229,19 @@ public class FileReader {
 		return result;
 
 	}
-
+	
+	/**
+	 * <p>
+	 * Takes in file and determines if braces are balanced
+	 * in the style of java
+	 * </p> 
+	 * 
+	 * @return ArrayList<String> of array with each word 
+	 * 	stored in an separate element for one line of Scanner
+	 * 
+	 * @param words
+	 * 			String of each line from Scanner file
+	 */
 	public static ArrayList<String> everyWord(String words) {
 		ArrayList<String> strArr = new ArrayList<String>();
 		String s = "";
@@ -175,14 +258,18 @@ public class FileReader {
 				strArr.add(addThis);
 				i += addThis.length();
 			}
-
-			// put everything before a space in
 		}
 
 		return strArr;
-
 	}
 
+	/**
+	 * 
+	 * @return boolean if braces are balanced
+	 * 
+	 * @param Scanner
+	 * 			file checked if braces are balanced
+	 */
 	public static boolean checkBraces(Scanner in) {
 		int counter = 0;
 
@@ -199,6 +286,13 @@ public class FileReader {
 		return (counter == 0);
 	}
 
+	/**
+	 * 
+	 * @return ArrayList<String> containing Mad Libs file with replacements
+	 * 	by user prompts
+	 * 
+	 * @param ArrayList<words> each word separate into elements for replacement
+	 */
 	public static ArrayList<String> userMadLibs(ArrayList<String> words) {
 
 		ArrayList<String> finalLibs = new ArrayList<String>(words.size());
@@ -239,6 +333,17 @@ public class FileReader {
 		return words;
 	}
 
+	/**
+	 * 
+	 * @return ArrayList<String> contains final Mad Libs replacements by fourth provided file
+	 * 	if applicable
+	 * 
+	 * @param words
+	 * 			contains words to be replaced
+	 * 
+	 * @param answerLibs
+	 * 			contains words to replace missing words in tags
+	 */
 	public static ArrayList<String> userMadLibs(ArrayList<String> words, ArrayList<String> answerLibs) {
 
 		for (int i = 0; i < words.size(); i++) {
@@ -246,10 +351,17 @@ public class FileReader {
 				words.set(i, answerLibs.get(i));
 			}
 		}
+		
 		return words;
-
 	}
 
+	/**
+	 * 
+	 * @return String without tags
+	 * 
+	 * @param lib
+	 * 			String with tags to be removed
+	 */
 	public static String removeLibs(String lib) {
 		lib = lib.replace("<", "");
 		lib = lib.replace(">", "");
@@ -257,15 +369,13 @@ public class FileReader {
 		return lib;
 	}
 
-	public static String arrayToString(ArrayList<String> libs) {
-		String s = "";
-		for (int i = 0; i < libs.size(); i++) {
-			s += libs.get(i);
-		}
-		return s;
-
-	}
-
+	/**
+	 * 
+	 * @return String to be printed from an ArrayList
+	 * 
+	 * @param libs
+	 *            ArrayList to be printed as one String
+	 */
 	public static String printArray(ArrayList<String> print) {
 		String s = "";
 		for (int i = 0; i < print.size(); i++) {
